@@ -9,7 +9,7 @@ CORS(app)  # CORS 설정
 CSV_FILE_PATH = "./data/program_sports.csv"
 
 # 데이터를 로드하는 함수
-def load_filtered_program_data(region=None, time=None, days=None, target=None, page=1, limit=20):
+def load_filtered_program_data(region=None, time=None, days=None, target=None, sport=None, page=1, limit=20):
     try:
         # CSV 데이터를 pandas로 읽기
         df = pd.read_csv(CSV_FILE_PATH)
@@ -29,6 +29,10 @@ def load_filtered_program_data(region=None, time=None, days=None, target=None, p
             # target 값이 해당하는 열에서 True인 데이터만 선택
             if target in ["child", "teen", "adult", "senior", "disorder"]:
                 df = df[df[target] == True]
+        
+        if sport:
+            # SPORT 열에서 선택한 스포츠만 필터링
+            df = df[df["SPORT"] == sport]
 
         # 페이지네이션 처리
         start = (page - 1) * limit
@@ -49,11 +53,12 @@ def get_programs():
     time = request.args.get('time', None)
     days = request.args.getlist('days')  # 요일은 리스트 형태로 받음
     target = request.args.get('target', None)  # 단일 값으로 받음
+    sport = request.args.get('sport', None)  # SPORT 필터 추가
     page = int(request.args.get('page', 1))
     limit = int(request.args.get('limit', 20))
     
     # 데이터를 로드하고 필터링
-    data, total_count = load_filtered_program_data(region, time, days, target, page, limit)
+    data, total_count = load_filtered_program_data(region, time, days, target, sport, page, limit)
     
     # 응답 데이터 형식
     response = {
