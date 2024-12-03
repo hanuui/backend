@@ -6,7 +6,7 @@ app = Flask(__name__)
 CORS(app)  # CORS 설정
 
 # CSV 파일 경로
-CSV_FILE_PATH = "./data/program2.csv"
+CSV_FILE_PATH = "./data/program_sports.csv"
 
 # 데이터를 로드하는 함수
 def load_filtered_program_data(region=None, time=None, days=None, target=None, page=1, limit=20):
