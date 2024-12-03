@@ -1,7 +1,9 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS  # CORS 추가
 import pandas as pd
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 data = pd.read_csv('virtual_data.csv')
 sports_no_disability = ['검도', '골프', '농구', '롤러인라인', '댄스(줌바 등)', '배구', '배드민턴', '볼링', '야구', '합기도', '복싱', '무용(발레 등)', '요가', '필라테스', '줄넘기', '크로스핏', '빙상(스케이트)', '주짓수', '클라이밍(암벽등반)', '당구', '수영', '스쿼시', '에어로빅', '유도', '축구(풋살)', '탁구', '태권도', '테니스', '헬스', '종합체육시설', '승마', '펜싱']
