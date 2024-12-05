@@ -20,7 +20,7 @@ def remove_nan_values(facility):
     return facility
 
 # 데이터를 로드하는 함수
-def load_filtered_program_data(region=None, time=None, days=None, target=None, sport=None, page=1, limit=20,search=None):
+def load_filtered_program_data(region=None, time=None, days=None, target=None, sport=None, page=1, limit=20,search=None, facility=None):
     try:
         # CSV 데이터를 pandas로 읽기
         df = pd.read_csv(CSV_FILE_PATH)
@@ -49,6 +49,9 @@ def load_filtered_program_data(region=None, time=None, days=None, target=None, s
             # FCLTY_NM 및 SPORT에서 키워드 검색
             df = df[df["FCLTY_NM"].str.contains(search, na=False, case=False) |
                     df["SPORT"].str.contains(search, na=False, case=False)]
+        if facility:
+            # 시설명으로 필터링
+            df = df[df["FCLTY_NM"] == facility]  # 정확하게 해당 시설명만 필터링
         
 
         # 페이지네이션 처리
@@ -74,10 +77,12 @@ def get_programs():
     page = int(request.args.get('page', 1))
     limit = int(request.args.get('limit', 20))
     search = request.args.get('search', None)  # 검색 키워드 추가
+    facility= request.args.get('facility', None)  # 시설명 필터 추가
+
 
     
     # 데이터를 로드하고 필터링
-    data, total_count = load_filtered_program_data(region, time, days, target, sport, page, limit, search)
+    data, total_count = load_filtered_program_data(region, time, days, target, sport, page, limit, search, facility)
     
     # 응답 데이터 형식
     response = {
