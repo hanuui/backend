@@ -46,9 +46,12 @@ def load_filtered_program_data(region=None, time=None, days=None, target=None, s
             df = df[df["SPORT"] == sport]
 
         if search:
-            # FCLTY_NM 및 SPORT에서 키워드 검색
+            # FCLTY_NM, FCLTY_ADDR, CTPRVN_NM, SPORT에서 키워드 검색
             df = df[df["FCLTY_NM"].str.contains(search, na=False, case=False) |
+                    df["FCLTY_ADDR"].str.contains(search, na=False, case=False) |
+                    df["CTPRVN_NM"].str.contains(search, na=False, case=False) |
                     df["SPORT"].str.contains(search, na=False, case=False)]
+        
         if facility:
             # 시설명으로 필터링
             df = df[df["FCLTY_NM"] == facility]  # 정확하게 해당 시설명만 필터링
